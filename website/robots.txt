@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Host
+Host: https://cosmic-gingersnap-202531.netlify.app
+
+# Sitemaps
+Sitemap: https://cosmic-gingersnap-202531.netlify.app/sitemap.xml

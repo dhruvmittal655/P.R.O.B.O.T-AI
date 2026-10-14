@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Metadata -->
+  <title>ProBot AI &mdash; Desktop Research Library &amp; Offline Study Assistant</title>
+  <meta name="title" content="ProBot AI &mdash; Desktop Research Library &amp; Offline Study Assistant">
+  <meta name="description" content="An open-source desktop research library built in Python. Search Wikipedia, save articles offline in SQLite, generate structured study notes, and query local LLMs via Ollama.">
+  <meta name="keywords" content="ProBot AI, desktop research tool, offline Wikipedia reader, study notes generator, Ollama phi3, Python research library">
+  <meta name="author" content="ProBot AI Project">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://cosmic-gingersnap-202531.netlify.app/">
+
+  <!-- Google Search Console Verification Tag -->
+  <meta name="google-site-verification" content="jj2vRREvRHUL_dbo55LOhLjF8XrKONuB9AOzI6cNibw" />
+
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cosmic-gingersnap-202531.netlify.app/">
+  <meta property="og:title" content="ProBot AI &mdash; Desktop Research Library &amp; Offline Study Assistant">
+  <meta property="og:description" content="Search Wikipedia, save articles offline in SQLite, extract study notes, and chat with local LLMs.">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Structured Data (SoftwareApplication) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ProBot AI",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Windows, Linux, macOS",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Desktop research assistant for offline Wikipedia browsing, study notes generation, and local AI query processing."
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Site Navigation -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="site-brand">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>ProBot AI</span>
+        <span class="brand-badge">Desktop v1.0</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Main Navigation">
+        <a href="#overview" class="nav-link">Overview</a>
+        <a href="#interactive-tool" class="nav-link">Live Extraction</a>
+        <a href="#architecture" class="nav-link">Architecture</a>
+        <a href="#setup" class="nav-link">Setup</a>
+        <a href="docs.html" class="nav-link">Documentation</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="overview" class="hero">
+      <div class="container">
+        <h1 class="hero-title">Desktop Research Library &amp; Offline Study Assistant</h1>
+        <p class="hero-description">
+          ProBot AI is an open-source Python desktop application that searches Wikipedia, aggregates multi-source tutorial packs, caches articles offline in a local SQLite database, extracts structured study notes, and answers context-based questions using local Ollama language models.
+        </p>
+        <div class="hero-actions">
+          <a href="#interactive-tool" class="btn btn-primary">Try Live Notes Generator</a>
+          <a href="#setup" class="btn btn-secondary">Installation Guide</a>
+          <a href="docs.html" class="btn btn-secondary">Read Full Docs</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real Interactive Notes Engine -->
+    <section id="interactive-tool" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Interactive Demonstration</span>
+          <h2>Live Wikipedia Research &amp; Notes Generator</h2>
+          <p>
+            Test the core extraction algorithm used in <code>notes_generator.py</code> directly in your browser. This tool queries the public Wikipedia API in real time, parses raw encyclopedic text, isolates informative key sentences, calculates keyword frequencies, and exports structured plain-text notes.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="search-box-wrapper">
+            <input 
+              type="text" 
+              id="search-topic-input" 
+              class="input-field" 
+              placeholder="Enter a topic (e.g. Machine learning, Operating system, Photosynthesis)..." 
+              aria-label="Search research topic"
+            />
+            <button id="search-topic-btn" class="btn btn-primary">Extract Notes</button>
+          </div>
+
+          <div class="sample-queries">
+            <span>Sample queries:</span>
+            <button type="button" class="chip-btn" data-topic="Machine learning">Machine learning</button>
+            <button type="button" class="chip-btn" data-topic="Operating system">Operating system</button>
+            <button type="button" class="chip-btn" data-topic="Information retrieval">Information retrieval</button>
+            <button type="button" class="chip-btn" data-topic="Natural language processing">Natural language processing</button>
+          </div>
+
+          <div id="search-status" style="display:none; margin-bottom:1rem; font-size:0.875rem; color:var(--text-secondary);"></div>
+
+          <!-- Dynamic Results Container -->
+          <div id="results-container" class="results-area">
+            <div class="results-meta">
+              <div>
+                <strong id="result-title" style="color:var(--text-primary); font-size:1.05rem;">Topic</strong>
+                <span style="margin: 0 0.5rem;">•</span>
+                <a id="result-source-link" href="#" target="_blank" rel="noopener">View Wikipedia Article ↗</a>
+              </div>
+              <button id="download-notes-btn" class="btn btn-secondary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Download Notes (.txt)</span>
+              </button>
+            </div>
+
+            <!-- Overview -->
+            <div class="notes-section">
+              <h3 class="notes-heading">1. Topic Overview</h3>
+              <p id="result-overview" style="font-size:0.9rem; line-height:1.6;"></p>
+            </div>
+
+            <!-- Key Points -->
+            <div class="notes-section">
+              <h3 class="notes-heading">2. Extracted Key Points</h3>
+              <ul id="result-keypoints" class="keypoints-list"></ul>
+            </div>
+
+            <!-- Keywords -->
+            <div class="notes-section">
+              <h3 class="notes-heading">3. Term Frequency &amp; Keywords</h3>
+              <div id="result-keywords" class="keywords-tags"></div>
+            </div>
+
+            <!-- Revision Questions -->
+            <div class="notes-section">
+              <h3 class="notes-heading">4. Conceptual Revision Questions</h3>
+              <ul id="result-questions" class="keypoints-list"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Capabilities Breakdown -->
+    <section id="capabilities" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Core Capabilities</span>
+          <h2>What ProBot AI Does</h2>
+          <p>
+            Designed to solve the fragmentation of researching across multiple browser tabs, unorganized notes, and missing internet connectivity.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="feature-item">
+            <h3 class="feature-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <span>Wikipedia Ingestion</span>
+            </h3>
+            <p class="feature-description">
+              Searches Wikipedia through OpenSearch and Action APIs, retrieving complete article text and saving high-resolution thumbnails locally into the <code>images/</code> cache.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <h3 class="feature-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+              <span>Offline SQLite Library</span>
+            </h3>
+            <p class="feature-description">
+              All saved articles, research packs, view histories, and favorites are stored locally in <code>data/knowledge.db</code>. When disconnected from the internet, search falls back seamlessly to local database records.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <h3 class="feature-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+              <span>Study Notes Generation</span>
+            </h3>
+            <p class="feature-description">
+              Extracts core summary paragraphs, strips footnote brackets, filters common stop words, identifies high-frequency topic terminology, and formats review questions for exam preparation.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <h3 class="feature-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <span>Private Local AI Assistant</span>
+            </h3>
+            <p class="feature-description">
+              Interfaces directly with Ollama running the lightweight <code>phi3:mini</code> model. Q&amp;A runs entirely on your local CPU or GPU without sending your research data or queries to external third parties.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <h3 class="feature-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span>Multi-Source Aggregation</span>
+            </h3>
+            <p class="feature-description">
+              Assembles research packs from Wikipedia, Britannica, GeeksforGeeks, and academic arXiv repositories based on topic keywords to compile a multi-perspective briefing document.
+            </p>
+          </div>
+
+          <div class="feature-item">
+            <h3 class="feature-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span>Document Export</span>
+            </h3>
+            <p class="feature-description">
+              Exports any article, extracted study pack, or research collection directly into formatted PDF documents (via ReportLab) or clean plain-text files for offline study.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture & Storage -->
+    <section id="architecture" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Architecture</span>
+          <h2>Local Storage &amp; Database Design</h2>
+          <p>
+            ProBot AI follows a local-first design philosophy. Everything is saved in predictable files on your machine.
+          </p>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Path / Table</th>
+                <th>Storage Engine</th>
+                <th>Purpose &amp; Stored Information</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>data/knowledge.db</code> &rarr; <code>articles</code></td>
+                <td>SQLite 3</td>
+                <td>Stores article title, full text, summary, topic, source URL, word count, view count, favorite status, and created timestamp.</td>
+              </tr>
+              <tr>
+                <td><code>data/knowledge.db</code> &rarr; <code>history</code></td>
+                <td>SQLite 3</td>
+                <td>Logs search queries, clicked articles, and timestamps for chronological history navigation.</td>
+              </tr>
+              <tr>
+                <td><code>data/knowledge.db</code> &rarr; <code>research_sources</code></td>
+                <td>SQLite 3</td>
+                <td>Stores parent research pack metadata, aggregate topics, and creation dates.</td>
+              </tr>
+              <tr>
+                <td><code>data/knowledge.db</code> &rarr; <code>research_chunks</code></td>
+                <td>SQLite 3</td>
+                <td>Contains chunked text snippets extracted from Wikipedia, arXiv, and tutorial websites.</td>
+              </tr>
+              <tr>
+                <td><code>images/</code></td>
+                <td>Filesystem Cache</td>
+                <td>Stores downloaded thumbnail images keyed by article name for offline visual rendering.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Setup Guide -->
+    <section id="setup" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">Installation</span>
+          <h2>Getting Started Locally</h2>
+          <p>
+            ProBot AI requires Python 3.10+ and standard build tools. Follow these steps to set up the environment and run the application.
+          </p>
+        </div>
+
+        <div class="space-y" style="display:flex; flex-direction:column; gap:1.5rem;">
+          <!-- Step 1 -->
+          <div>
+            <h3>1. Install Python Dependencies</h3>
+            <p>Create a virtual environment if desired, then install all project requirements:</p>
+            <div class="code-block-header">
+              <span>Terminal (PowerShell / Bash)</span>
+              <button class="copy-btn" data-target="code-step-1">Copy</button>
+            </div>
+            <pre><code id="code-step-1">pip install -r requirements.txt</code></pre>
+          </div>
+
+          <!-- Step 2 -->
+          <div>
+            <h3>2. Download the SpaCy Language Model</h3>
+            <p>SpaCy uses the small English pipeline for entity extraction and linguistic analysis:</p>
+            <div class="code-block-header">
+              <span>Terminal</span>
+              <button class="copy-btn" data-target="code-step-2">Copy</button>
+            </div>
+            <pre><code id="code-step-2">python -m spacy download en_core_web_sm</code></pre>
+          </div>
+
+          <!-- Step 3 -->
+          <div>
+            <h3>3. Setup Ollama (For Local AI Chat)</h3>
+            <p>Install <a href="https://ollama.com/" target="_blank" rel="noopener">Ollama</a>, ensure the service is running, and pull the lightweight <code>phi3:mini</code> model:</p>
+            <div class="code-block-header">
+              <span>Terminal</span>
+              <button class="copy-btn" data-target="code-step-3">Copy</button>
+            </div>
+            <pre><code id="code-step-3">ollama pull phi3:mini</code></pre>
+          </div>
+
+          <!-- Step 4 -->
+          <div>
+            <h3>4. Run Application</h3>
+            <p>Launch the CustomTkinter graphical desktop interface:</p>
+            <div class="code-block-header">
+              <span>Terminal</span>
+              <button class="copy-btn" data-target="code-step-4">Copy</button>
+            </div>
+            <pre><code id="code-step-4">python main.py</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Frequently Asked Questions -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label">FAQ</span>
+          <h2>Frequently Asked Questions</h2>
+        </div>
+
+        <details>
+          <summary>Does ProBot AI work completely without an internet connection?</summary>
+          <div class="faq-body">
+            Yes. When offline, ProBot AI falls back to articles and research chunks already cached in <code>data/knowledge.db</code>. It supports case-insensitive exact matching and partial title searches on saved documents. However, searching for brand-new Wikipedia articles or downloading arXiv PDFs requires an active internet connection.
+          </div>
+        </details>
+
+        <details>
+          <summary>Can I run the application without installing Ollama?</summary>
+          <div class="faq-body">
+            Yes. All core features&mdash;Wikipedia search, article caching, offline SQLite library, extractive study notes generator, and PDF export&mdash;function independently. The local AI chat tab is the only component that requires an active Ollama instance with <code>phi3:mini</code>.
+          </div>
+        </details>
+
+        <details>
+          <summary>Where are my downloaded articles and images saved?</summary>
+          <div class="faq-body">
+            Articles and research metadata are stored inside <code>data/knowledge.db</code> as an SQLite database. Downloaded thumbnails are saved in the <code>images/</code> directory. Deleting an article inside the app removes it from the database table; image files may remain in the cache until cleaned manually.
+          </div>
+        </details>
+
+        <details>
+          <summary>What graphical framework is used for the desktop interface?</summary>
+          <div class="faq-body">
+            The user interface is built using CustomTkinter, an extension of Python's standard Tkinter that provides modern dark/light mode widgets, high-DPI scaling, and consistent cross-platform styling across Windows, macOS, and Linux.
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div>
+        <strong>ProBot AI</strong> &mdash; Open-source academic and desktop research library.
+      </div>
+      <ul class="footer-links">
+        <li><a href="docs.html">Documentation</a></li>
+        <li><a href="sitemap.xml">Sitemap</a></li>
+        <li><a href="robots.txt">robots.txt</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+</body>
+</html>

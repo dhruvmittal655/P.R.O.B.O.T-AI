@@ -1,0 +1,11 @@
+beautifulsoup4
+customtkinter
+ddgs
+ollama
+Pillow
+python-docx
+reportlab
+requests
+scikit-learn
+sentence-transformers
+spacy

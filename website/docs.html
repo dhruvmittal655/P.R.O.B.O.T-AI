@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ProBot AI &mdash; Technical Documentation &amp; Architecture</title>
+  <meta name="title" content="ProBot AI &mdash; Technical Documentation &amp; Architecture">
+  <meta name="description" content="Detailed technical documentation for ProBot AI. Codebase structure, Python modules, SQLite schema, offline caching, and Ollama integration.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://cosmic-gingersnap-202531.netlify.app/docs.html">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Site Navigation -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="site-brand">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span>ProBot AI</span>
+        <span class="brand-badge">Documentation</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Main Navigation">
+        <a href="index.html" class="nav-link">Overview</a>
+        <a href="index.html#interactive-tool" class="nav-link">Live Extraction</a>
+        <a href="index.html#setup" class="nav-link">Setup</a>
+        <a href="docs.html" class="nav-link active">Documentation</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 3.5rem; padding-bottom: 4rem;">
+    <div style="margin-bottom: 2.5rem;">
+      <span class="section-label">Architecture Reference</span>
+      <h1>Technical Documentation</h1>
+      <p style="font-size: 1.05rem; max-width: 760px; margin-top: 0.5rem;">
+        Complete reference manual for the ProBot AI Python desktop library, including module breakdown, data models, offline persistence, and local AI orchestration.
+      </p>
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="panel" style="margin-bottom: 2.5rem;">
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em;">Contents</h3>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.9rem;">
+        <li><a href="#codebase-structure">&rarr; 1. Codebase &amp; Directory Structure</a></li>
+        <li><a href="#modules-breakdown">&rarr; 2. Python Modules Breakdown</a></li>
+        <li><a href="#dependencies-analysis">&rarr; 3. Dependencies &amp; Libraries</a></li>
+        <li><a href="#database-schema">&rarr; 4. SQLite Database Schema (knowledge.db)</a></li>
+        <li><a href="#offline-design">&rarr; 5. Offline Fallback Mechanics</a></li>
+        <li><a href="#troubleshooting">&rarr; 6. Troubleshooting &amp; Diagnostics</a></li>
+      </ul>
+    </div>
+
+    <!-- Section 1: Codebase Structure -->
+    <section id="codebase-structure" style="margin-bottom: 3rem;">
+      <h2>1. Codebase &amp; Directory Structure</h2>
+      <p>The application is structured into decoupled modules separating data extraction, persistence, UI rendering, and AI querying:</p>
+      
+      <pre><code>ProBot-AI/
+├── main.py                 # Application launcher & dependency validator
+├── gui.py                  # CustomTkinter graphical desktop interface
+├── searcher.py             # Wikipedia OpenSearch & search suggestion query client
+├── downloader.py           # Multi-source scraper (Wikipedia, arXiv, tutorials)
+├── notes_generator.py      # Linguistic parser, sentence ranker & keyword counter
+├── database.py             # SQLite ORM wrapper for articles, history & chunks
+├── ai_assistant.py         # Ollama interface for phi3:mini local LLM chat
+├── citation_formatter.py   # APA, BibTeX, IEEE citation builder
+├── requirements.txt        # Pinned Python package dependencies
+├── data/
+│   └── knowledge.db        # Primary SQLite database file
+├── images/                 # Downloaded article thumbnails cache
+└── website/                # Web showcase, live extractor & documentation</code></pre>
+    </section>
+
+    <!-- Section 2: Modules Breakdown -->
+    <section id="modules-breakdown" style="margin-bottom: 3rem;">
+      <h2>2. Python Modules Breakdown</h2>
+      
+      <div style="display:flex; flex-direction:column; gap:1.25rem;">
+        <div class="panel">
+          <h3><code>main.py</code> &mdash; Entry Point &amp; Verification</h3>
+          <p>
+            Validates that all eleven required Python dependencies can be resolved before launching the graphical interface. If any module is missing, it prints an explanatory error message pointing to <code>requirements.txt</code> instead of crashing silently.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3><code>searcher.py</code> &mdash; Wikipedia Query Engine</h3>
+          <p>
+            Handles live web queries. Uses Wikipedia's OpenSearch REST API (<code>https://en.wikipedia.org/w/api.php?action=opensearch</code>) with custom User-Agent headers to retrieve top matching article titles, summaries, and suggestion chips.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3><code>downloader.py</code> &mdash; Multi-Source Aggregator</h3>
+          <p>
+            Expands topic searches beyond Wikipedia. When a programming topic is detected (e.g. Python, SQL, Machine Learning), it queries technical platforms such as GeeksforGeeks and academic repositories like arXiv, parsing HTML into structured study chunks.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3><code>notes_generator.py</code> &mdash; Extractive Summarizer</h3>
+          <p>
+            Implements algorithmic text summarization without requiring an active internet connection. Cleans citation annotations, extracts introductory overviews, filters English stop words, counts word frequencies, and constructs revision prompts.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3><code>database.py</code> &mdash; SQLite Persistence Layer</h3>
+          <p>
+            Manages database connections, schema migrations, full-text storage, favorite toggles, and view count tracking. Employs parameterized queries to safeguard data integrity.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3><code>ai_assistant.py</code> &mdash; Local Ollama Orchestration</h3>
+          <p>
+            Connects to a local Ollama daemon over <code>http://localhost:11434</code>. Sends prompt contexts derived from the currently opened article or research pack to <code>phi3:mini</code>, ensuring user inquiries never leave the local environment.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Dependencies -->
+    <section id="dependencies-analysis" style="margin-bottom: 3rem;">
+      <h2>3. Dependencies &amp; Libraries</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Library</th>
+              <th>Import Name</th>
+              <th>Functional Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>customtkinter</code></td>
+              <td><code>customtkinter</code></td>
+              <td>Modern UI framework with dark theme support and high-DPI scaling.</td>
+            </tr>
+            <tr>
+              <td><code>requests</code></td>
+              <td><code>requests</code></td>
+              <td>HTTP client for Wikipedia and web content extraction.</td>
+            </tr>
+            <tr>
+              <td><code>beautifulsoup4</code></td>
+              <td><code>bs4</code></td>
+              <td>HTML parsing and cleaning for scraped tutorial content.</td>
+            </tr>
+            <tr>
+              <td><code>spacy</code></td>
+              <td><code>spacy</code></td>
+              <td>Entity recognition and linguistic structure analysis using <code>en_core_web_sm</code>.</td>
+            </tr>
+            <tr>
+              <td><code>ollama</code></td>
+              <td><code>ollama</code></td>
+              <td>Python SDK for connecting to the local Ollama LLM runtime.</td>
+            </tr>
+            <tr>
+              <td><code>reportlab</code></td>
+              <td><code>reportlab</code></td>
+              <td>PDF document generation and formatting for study exports.</td>
+            </tr>
+            <tr>
+              <td><code>Pillow</code></td>
+              <td><code>PIL</code></td>
+              <td>Thumbnail image resizing and caching for UI preview cards.</td>
+            </tr>
+            <tr>
+              <td><code>scikit-learn</code></td>
+              <td><code>sklearn</code></td>
+              <td>TF-IDF vectorization and similarity calculations.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 4: Database Schema -->
+    <section id="database-schema" style="margin-bottom: 3rem;">
+      <h2>4. SQLite Database Schema (<code>knowledge.db</code>)</h2>
+      <p>Data is stored locally in <code>data/knowledge.db</code> across four primary relational tables:</p>
+      
+      <pre><code>-- Primary Articles Table
+CREATE TABLE IF NOT EXISTS articles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT UNIQUE NOT NULL,
+    content TEXT NOT NULL,
+    summary TEXT,
+    topic TEXT,
+    source_url TEXT,
+    word_count INTEGER,
+    view_count INTEGER DEFAULT 0,
+    is_favorite INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Search and Access History
+CREATE TABLE IF NOT EXISTS history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    article_id INTEGER,
+    query TEXT,
+    accessed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(article_id) REFERENCES articles(id) ON DELETE CASCADE
+);
+
+-- Multi-Source Research Packs
+CREATE TABLE IF NOT EXISTS research_sources (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    topic TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Chunks Associated with Research Packs
+CREATE TABLE IF NOT EXISTS research_chunks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_id INTEGER,
+    title TEXT,
+    content TEXT,
+    FOREIGN KEY(source_id) REFERENCES research_sources(id) ON DELETE CASCADE
+);</code></pre>
+    </section>
+
+    <!-- Section 5: Offline Design -->
+    <section id="offline-design" style="margin-bottom: 3rem;">
+      <h2>5. Offline Fallback Mechanics</h2>
+      <p>
+        When internet connectivity is disconnected:
+      </p>
+      <ul style="margin-left: 1.5rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.6;">
+        <li><strong>Local Search:</strong> Searching searches against <code>articles.title</code> and <code>articles.content</code> in SQLite rather than making network requests.</li>
+        <li><strong>Image Rendering:</strong> The app renders previously cached JPEG/PNG files from the local <code>images/</code> folder.</li>
+        <li><strong>Study Notes:</strong> The rule-based algorithm in <code>notes_generator.py</code> operates purely in-memory with zero network overhead.</li>
+        <li><strong>Local LLM Q&amp;A:</strong> Ollama runs as a local background daemon on <code>127.0.0.1:11434</code>, meaning model inference continues with full capability offline.</li>
+      </ul>
+    </section>
+
+    <!-- Section 6: Troubleshooting -->
+    <section id="troubleshooting">
+      <h2>6. Troubleshooting &amp; Diagnostics</h2>
+      <div class="panel">
+        <h4 style="margin-bottom: 0.35rem; color: var(--text-primary);">Ollama Connection Error (AI Chat Unavailable)</h4>
+        <p style="font-size:0.875rem;">
+          Verify that the Ollama service is actively running on your system by executing <code>ollama list</code> in your terminal. Ensure the <code>phi3:mini</code> model has finished downloading.
+        </p>
+
+        <h4 style="margin-top: 1rem; margin-bottom: 0.35rem; color: var(--text-primary);">SpaCy Model Missing (<code>Can't find model 'en_core_web_sm'</code>)</h4>
+        <p style="font-size:0.875rem;">
+          Run <code>python -m spacy download en_core_web_sm</code> within the active virtual environment to download the required English linguistic model.
+        </p>
+
+        <h4 style="margin-top: 1rem; margin-bottom: 0.35rem; color: var(--text-primary);">Corrupted Local Database</h4>
+        <p style="font-size:0.875rem;">
+          If <code>data/knowledge.db</code> becomes corrupted, delete or rename the file. ProBot AI will automatically initialize a fresh, schema-compliant database upon the next start.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div>
+        <strong>ProBot AI</strong> &mdash; Open-source academic and desktop research library.
+      </div>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="docs.html">Documentation</a></li>
+        <li><a href="sitemap.xml">Sitemap</a></li>
+        <li><a href="robots.txt">robots.txt</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>
