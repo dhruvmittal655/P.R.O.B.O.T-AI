@@ -612,7 +612,7 @@ details[open] summary::after {
 }
 
 /* ==========================================================================
-   Instagram Integration Styles
+   Social & Integration Styles
    ========================================================================== */
 
 /* Header Social Link */
@@ -631,20 +631,35 @@ details[open] summary::after {
   transition: all 0.2s ease;
 }
 
-.nav-social-link:hover {
+.nav-social-link svg {
+  transition: transform 0.2s ease;
+}
+
+.nav-social-link:hover svg {
+  transform: scale(1.1);
+}
+
+.nav-ig-link:hover {
   color: #ffffff;
   border-color: #e1306c;
   background-color: rgba(225, 48, 108, 0.12);
   text-decoration: none;
 }
 
-.nav-social-link svg {
+.nav-ig-link svg {
   color: #e1306c;
-  transition: transform 0.2s ease;
 }
 
-.nav-social-link:hover svg {
-  transform: scale(1.1);
+.nav-github-link:hover {
+  color: #ffffff;
+  border-color: var(--accent);
+  background-color: var(--accent-subtle);
+  text-decoration: none;
+}
+
+.nav-github-link svg {
+  color: var(--text-primary);
+  fill: currentColor;
 }
 
 /* Footer Social Link */
@@ -656,11 +671,20 @@ details[open] summary::after {
 }
 
 .footer-social-link svg {
+  color: var(--text-secondary);
+  transition: color 0.15s ease;
+}
+
+.footer-social-link.footer-ig-link svg {
   color: #e1306c;
 }
 
 .footer-social-link:hover {
   color: #ffffff !important;
+}
+
+.footer-social-link:hover svg {
+  color: #ffffff;
 }
 
 /* Instagram Profile Banner Card */
