@@ -1,4 +1,9 @@
-# SmartSearch AI
+# SmartSearch AI (ProBot AI)
+
+[![Live Website](https://img.shields.io/badge/Live_Website-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://cosmic-gingersnap-202531.netlify.app/)
+[![Documentation](https://img.shields.io/badge/Docs-Live-blue?style=for-the-badge)](https://cosmic-gingersnap-202531.netlify.app/docs.html)
+
+> 🌐 **Official Website & Live Demo:** [https://cosmic-gingersnap-202531.netlify.app/](https://cosmic-gingersnap-202531.netlify.app/)
 
 SmartSearch AI is a desktop research library. It can search Wikipedia, save
 articles and images locally, work with saved articles offline, generate study
