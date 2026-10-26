@@ -31,7 +31,10 @@ ENV/
 env.bak/
 venv.bak/
 
-# Microsoft Office temporary lock files
+# Microsoft Office documents & lock files
+*.docx
+*.pptx
+*.xlsx
 ~$*.docx
 ~$*.pptx
 ~$*.xlsx
